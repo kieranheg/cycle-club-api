@@ -1,0 +1,10 @@
+apply plugin: 'org.flywaydb.flyway'
+
+
+flyway {
+    url='jdbc:mysql://localhost:3306/cycling_club'
+    user='admin'
+    password='password'
+    baselineOnMigrate = true
+    outOfOrder = true
+}
