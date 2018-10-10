@@ -1,4 +1,4 @@
-package com.muscy.api.user;
+package com.muscy.api.member;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
