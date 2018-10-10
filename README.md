@@ -1,3 +1,5 @@
+# Git Repo cycle-club-api
+
 **Docker**
 
 MS SQL dB and JDBC driver v8.0.12
@@ -26,7 +28,4 @@ ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
 ```
 
 Ref https://dzone.com/articles/docker-for-mac-mysql-setup
-
-
-
 
