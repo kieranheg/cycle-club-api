@@ -2,11 +2,12 @@ package com.muscy.api.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -19,13 +20,18 @@ public class MemberController {
     
     @GetMapping("/member")
     public ResponseEntity member() {
-        log.info("IN /member");
+        log.info("IN retrieve all members");
+        return new ResponseEntity<Object>(memberService.findAllMembers(), HttpStatus.NOT_FOUND);
+    }
+    
+    @PutMapping("/member")
+    public ResponseEntity createNewMember(@RequestBody MemberDao newMember) {
+        log.info("IN createNewMember");
         
-        List<MemberDao> memberDaos = memberService.findAllMembers();
-        for (MemberDao memberDao : memberDaos) {
-            log.info(memberDao.toString());
-        }
+        memberService.createMember(newMember);
         
         return new ResponseEntity(OK);
     }
 }
+// TODO error logging framework
+// TODO Add tests

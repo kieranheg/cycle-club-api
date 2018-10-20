@@ -1,24 +1,25 @@
 package com.muscy.api.member;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name="members")
-@AllArgsConstructor
-@NoArgsConstructor
 public class MemberDao {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
     private Long id;
+    
     @Column(name="FIRSTNAME")
     private String firstName;
+    
     @Column(name="LASTNAME")
     private String lastName;
+    
     @Column(name="AGE")
     private int age;
     

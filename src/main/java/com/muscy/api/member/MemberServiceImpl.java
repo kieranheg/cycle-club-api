@@ -19,9 +19,15 @@ public class MemberServiceImpl implements MemberService {
         List<MemberDao> memberDaos = new ArrayList<>();
         for (MemberDao memberDao : memberRepository.findAll()) {
             memberDaos.add(memberDao);
-            log.info(memberDao.toString());
+            log.info("Found " + memberDao.toString());
         }
         return memberDaos;
+    }
+    
+    @Override
+    public void createMember(final MemberDao newMember) {
+        log.info("IN MemberRepositoryImpl newMember()");
+        memberRepository.save(newMember);
     }
 }
 
