@@ -20,16 +20,14 @@ public class MemberController {
     
     @GetMapping("/member")
     public ResponseEntity member() {
-        log.info("IN retrieve all members");
-        return new ResponseEntity<Object>(memberService.findAllMembers(), HttpStatus.NOT_FOUND);
+        log.info(">> in GET members");
+        return new ResponseEntity<Object>(memberService.findAllMembers(), HttpStatus.OK);
     }
     
     @PutMapping("/member")
     public ResponseEntity createNewMember(@RequestBody MemberDao newMember) {
-        log.info("IN createNewMember");
-        
+        log.info(">> in PUT member");
         memberService.createMember(newMember);
-        
         return new ResponseEntity(OK);
     }
 }
