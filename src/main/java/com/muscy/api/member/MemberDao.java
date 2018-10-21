@@ -1,11 +1,13 @@
 package com.muscy.api.member;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Builder
 @Entity
 @Data
 @AllArgsConstructor
@@ -30,7 +32,7 @@ public class MemberDao {
     @Override
     public String toString() {
         return String.format(
-                "Member[id=%d, firstName='%s', lastName='%s', 'age=%d]",
+                "[Member[id=%d, firstName='%s', lastName='%s', 'age=%d]",
                 id, firstName, lastName, age);
     }
     

@@ -18,8 +18,8 @@ public class MemberServiceImpl implements MemberService {
     }
     
     @Override
-    public List<MemberDao> findAllMembers() {
-        log.info("IN MemberRepositoryImpl findAllMembers()");
+    public List<MemberDao> retrieveAllMembers() {
+        log.info("IN MemberRepositoryImpl retrieveAllMembers()");
         List<MemberDao> memberDaos = new ArrayList<>();
         for (MemberDao memberDao : memberRepository.findAll()) {
             memberDaos.add(memberDao);

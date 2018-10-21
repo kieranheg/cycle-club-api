@@ -3,8 +3,9 @@ package com.muscy.api.member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,9 +20,9 @@ public class MemberController {
     }
     
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity member() {
+    public List<MemberDao> member() {
         log.info(">> in GET members");
-        return new ResponseEntity<Object>(memberService.findAllMembers(), HttpStatus.OK);
+        return memberService.retrieveAllMembers();
     }
     
     @RequestMapping(method = RequestMethod.PUT)
