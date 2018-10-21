@@ -24,8 +24,7 @@ repositories {
 	mavenCentral()
 }
 
-//defaultTasks 'clean', 'build', 'test'
-defaultTasks 'clean', 'build'
+defaultTasks 'clean', 'build', 'test'
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')

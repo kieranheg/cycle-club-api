@@ -4,32 +4,35 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
-@RestController
 @Slf4j
+@RestController
+@RequestMapping(value="/member")
 public class MemberController {
     
-    @Autowired
-    MemberService memberService;
+    private final MemberService memberService;
     
-    @GetMapping("/member")
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity member() {
         log.info(">> in GET members");
         return new ResponseEntity<Object>(memberService.findAllMembers(), HttpStatus.OK);
     }
     
-    @PutMapping("/member")
-    public ResponseEntity createNewMember(@RequestBody MemberDao newMember) {
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createNewMember(@RequestBody MemberDao newMember) {
         log.info(">> in PUT member");
         memberService.createMember(newMember);
-        return new ResponseEntity(OK);
     }
 }
 // TODO error logging framework
-// TODO Add tests
+// TODO Add tests -see https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/
+// TODO get member/{id}
+// TODO Add auditable
+// TODO Add weather service

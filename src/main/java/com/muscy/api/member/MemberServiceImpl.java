@@ -10,8 +10,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class MemberServiceImpl implements MemberService {
-    @Autowired
     private MemberRepository memberRepository;
+    
+    @Autowired
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
     
     @Override
     public List<MemberDao> findAllMembers() {
