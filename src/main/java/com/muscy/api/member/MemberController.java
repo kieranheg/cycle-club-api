@@ -6,12 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(value="/member")
 public class MemberController {
-    
     private final MemberService memberService;
     
     @Autowired
@@ -19,16 +18,28 @@ public class MemberController {
         this.memberService = memberService;
     }
     
-    @RequestMapping(method = RequestMethod.GET)
-    public List<MemberDao> member() {
-        log.info(">> in GET members");
+    @RequestMapping(value="/members", method = RequestMethod.GET)
+    public List<MemberDao> getAllMembers() {
+        log.info(">> in getAllMembers");
         return memberService.retrieveAllMembers();
     }
     
-    @RequestMapping(method = RequestMethod.PUT)
+    @GetMapping("/member/{id}")
+    public Optional<MemberDao> getMemberWithId(@PathVariable Long id) {
+        log.info(">> in getMemberWithId");
+        return memberService.getMember(id);
+    }
+    
+    @RequestMapping(value="/member", method = RequestMethod.GET)
+    public Optional<MemberDao> getMemberWithLastName(@RequestParam("lastname") String lastName) {
+        log.info(">> in getMemberWithLastName");
+        return memberService.getMember(lastName);
+    }
+    
+    @RequestMapping(value="/member", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createNewMember(@RequestBody MemberDao newMember) {
-        log.info(">> in PUT member");
+        log.info(">> in POST member");
         memberService.createMember(newMember);
     }
 }

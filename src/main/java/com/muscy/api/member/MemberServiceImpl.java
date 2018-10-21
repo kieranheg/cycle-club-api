@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,6 +33,16 @@ public class MemberServiceImpl implements MemberService {
     public void createMember(final MemberDao newMember) {
         log.info("IN MemberRepositoryImpl newMember()");
         memberRepository.save(newMember);
+    }
+    
+    @Override
+    public Optional<MemberDao> getMember(final String lastName) {
+        return Optional.of(new MemberDao());
+    }
+    
+    @Override
+    public Optional<MemberDao> getMember(final Long id) {
+        return Optional.of(new MemberDao());
     }
 }
 

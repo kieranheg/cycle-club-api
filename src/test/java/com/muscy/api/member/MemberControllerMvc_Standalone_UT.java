@@ -1,6 +1,7 @@
 package com.muscy.api.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.muscy.api.member.exception.NonExistingMemberException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,12 +16,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MemberControllerMvc_Standalone_UT {
@@ -48,7 +50,7 @@ public class MemberControllerMvc_Standalone_UT {
     public void canCreateNewMember() throws Exception {
         // when
         MockHttpServletResponse response = mockMvc.perform(
-                put("/member/")
+                post("/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonMemberDao.write(new MemberDao(1L, "Rob", "Mannon", 50)).getJson()))
                 .andReturn().getResponse();
@@ -64,7 +66,7 @@ public class MemberControllerMvc_Standalone_UT {
                 .willReturn(memberDaoList);
         // when
         MockHttpServletResponse response = mockMvc.perform(
-                get("/member/")
+                get("/members")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         
@@ -81,5 +83,79 @@ public class MemberControllerMvc_Standalone_UT {
     
     private MemberDao buildMemberDao(final Long id, final String firstName, final String lastName, final int age) {
         return MemberDao.builder().id(id).firstName(firstName).lastName(lastName).age(age).build();
+    }
+    
+    @Test
+    public void canRetrieveByLastNameWhenExists() throws Exception {
+        MemberDao testMemberDao = buildMemberDao(1L, "Rob", "RobotMan", 25);
+        // given
+        given(memberService.getMember("RobotMan"))
+                .willReturn(Optional.of(testMemberDao));
+        
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/member/?lastname=RobotMan")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        
+        // then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(
+                jsonMemberDao.write(testMemberDao).getJson()
+        );
+    }
+    
+    @Test
+    public void canRetrieveByLastNameWhenDoesNotExist() throws Exception {
+        // given
+        given(memberService.getMember("RobotMan"))
+                .willReturn(Optional.empty());
+        
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/member/?lastname=RobotMan")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        
+        // then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo("null");
+    }
+    
+    @Test
+    public void canRetrieveByIdWhenExists() throws Exception {
+        MemberDao testMemberDao = buildMemberDao(2L, "Rob", "RobotMan", 25);
+        // given
+        given(memberService.getMember(2L))
+                .willReturn(Optional.of(testMemberDao));
+        
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/member/2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        
+        // then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(
+                jsonMemberDao.write(testMemberDao).getJson()
+        );
+    }
+    
+    @Test
+    public void canRetrieveByIdWhenDoesNotExist() throws Exception {
+        // given
+        given(memberService.getMember(2L))
+                .willThrow(new NonExistingMemberException());
+        
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/member/2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        
+        // then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.getContentAsString()).isEmpty();
     }
 }
