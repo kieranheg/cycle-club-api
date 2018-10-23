@@ -18,7 +18,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
+import static com.muscy.api.member.MemberTestUtilities.buildMemberDao;
+import static com.muscy.api.member.MemberTestUtilities.buildMultiMembers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,20 +70,9 @@ public class MemberControllerMvc_Standalone_UT {
                 get("/members")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).toString().equals((memberDaoList.toString()));
-    }
-    
-    private List<MemberDao> buildMultiMembers() {
-        return asList(
-                buildMemberDao(1L, "fName2", "lName2", 31),
-                buildMemberDao(2L, "fName2", "lName2", 32));
-    }
-    
-    private MemberDao buildMemberDao(final Long id, final String firstName, final String lastName, final int age) {
-        return MemberDao.builder().id(id).firstName(firstName).lastName(lastName).age(age).build();
     }
     
     @Test
@@ -91,13 +81,11 @@ public class MemberControllerMvc_Standalone_UT {
         // given
         given(memberService.getMember("RobotMan"))
                 .willReturn(Optional.of(testMemberDao));
-        
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get("/member/?lastname=RobotMan")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(
@@ -110,13 +98,11 @@ public class MemberControllerMvc_Standalone_UT {
         // given
         given(memberService.getMember("RobotMan"))
                 .willReturn(Optional.empty());
-        
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get("/member/?lastname=RobotMan")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo("null");
@@ -128,13 +114,11 @@ public class MemberControllerMvc_Standalone_UT {
         // given
         given(memberService.getMember(2L))
                 .willReturn(Optional.of(testMemberDao));
-        
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get("/member/2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(
@@ -147,13 +131,11 @@ public class MemberControllerMvc_Standalone_UT {
         // given
         given(memberService.getMember(2L))
                 .willThrow(new NonExistingMemberException());
-        
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get("/member/2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(response.getContentAsString()).isEmpty();
