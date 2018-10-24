@@ -30,19 +30,19 @@ public class MemberServiceImpl implements MemberService {
     }
     
     @Override
-    public void createMember(final MemberDao newMember) {
+    public MemberDao createMember(final MemberDao newMember) {
         log.info("IN MemberRepositoryImpl newMember()");
-        memberRepository.save(newMember);
+        return memberRepository.save(newMember);
     }
     
     @Override
     public Optional<MemberDao> getMember(final String lastName) {
-        return Optional.of(new MemberDao());
+        return memberRepository.findByLastName(lastName);
     }
     
     @Override
     public Optional<MemberDao> getMember(final Long id) {
-        return Optional.of(new MemberDao());
+        return memberRepository.findById(id);
     }
 }
 

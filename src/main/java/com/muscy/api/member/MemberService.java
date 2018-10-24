@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface MemberService {
     List<MemberDao> retrieveAllMembers();
     
-    void createMember(MemberDao newMember);
+    MemberDao createMember(MemberDao newMember);
     
     Optional<MemberDao> getMember(String lastName);
     

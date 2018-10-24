@@ -3,7 +3,6 @@ package com.muscy.api.member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name="members")
 public class MemberDao {
     
@@ -28,6 +27,12 @@ public class MemberDao {
     
     @Column(name="AGE")
     private int age;
+    
+    public MemberDao(final String firstName, final String lastName, final int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
     
     @Override
     public String toString() {

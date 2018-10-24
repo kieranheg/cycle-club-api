@@ -44,7 +44,5 @@ public class MemberController {
     }
 }
 // TODO error logging framework
-// TODO Add tests -see https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/
-// TODO get member/{id}
 // TODO Add auditable
 // TODO Add weather service

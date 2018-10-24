@@ -1,5 +1,8 @@
-package com.muscy.api.member;
+package com.muscy.api.unit.member;
 
+import com.muscy.api.helpers.MemberTestUtilities;
+import com.muscy.api.member.MemberDao;
+import com.muscy.api.member.MemberService;
 import com.muscy.api.member.exception.NonExistingMemberException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static com.muscy.api.member.MemberTestUtilities.buildMemberDao;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -36,7 +38,7 @@ public class MemberController_SpringBootTest_UT {
     
     @Test
     public void canRetrieveByIdWhenExists() {
-        MemberDao testMemberDao = buildMemberDao(2L, "Rob", "RobotMan", 25);
+        MemberDao testMemberDao = MemberTestUtilities.buildMemberDao(2L, "Rob", "RobotMan", 25);
         // given
         given(memberService.getMember(2L))
                 .willReturn(Optional.of(testMemberDao));
@@ -64,7 +66,7 @@ public class MemberController_SpringBootTest_UT {
     
     @Test
     public void canRetrieveByNameWhenExists() {
-        MemberDao testMemberDao = buildMemberDao(1L, "Rob", "RobotMan", 25);
+        MemberDao testMemberDao = MemberTestUtilities.buildMemberDao(1L, "Rob", "RobotMan", 25);
         // given
         given(memberService.getMember("RobotMan"))
                 .willReturn(Optional.of(testMemberDao));

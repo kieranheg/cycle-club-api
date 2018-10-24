@@ -1,6 +1,10 @@
-package com.muscy.api.member;
+package com.muscy.api.unit.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.muscy.api.member.MemberController;
+import com.muscy.api.member.MemberDao;
+import com.muscy.api.member.MemberExceptionHandler;
+import com.muscy.api.member.MemberService;
 import com.muscy.api.member.exception.NonExistingMemberException;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
-import static com.muscy.api.member.MemberTestUtilities.buildMemberDao;
-import static com.muscy.api.member.MemberTestUtilities.buildMultiMembers;
+import static com.muscy.api.helpers.MemberTestUtilities.buildMemberDao;
+import static com.muscy.api.helpers.MemberTestUtilities.buildMultiMembers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
