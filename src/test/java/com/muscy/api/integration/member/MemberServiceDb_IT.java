@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class MemberService_IT {
+public class MemberServiceDb_IT {
 
     
     @Autowired
@@ -72,7 +72,7 @@ public class MemberService_IT {
         assertThat(savedMember.getLastName()).isEqualToIgnoringCase(SCARAMANGA);
         assertThat(savedMember.getAge()).isEqualTo(AGE_55);
         
-        Optional<MemberDao> retrievedMember = memberService.getMember(savedMember.getId());
+        Optional<MemberDao> retrievedMember = memberService.getMember(SCARAMANGA);
         assertThat(retrievedMember.isPresent()).isNotNull();
         assertThat(retrievedMember.get().getFirstName()).isEqualToIgnoringCase(FRANCISCO);
         assertThat(retrievedMember.get().getLastName()).isEqualToIgnoringCase(SCARAMANGA);

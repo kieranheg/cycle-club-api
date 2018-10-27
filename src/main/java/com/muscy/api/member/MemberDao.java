@@ -1,5 +1,6 @@
 package com.muscy.api.member;
 
+import com.muscy.api.audit.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +11,8 @@ import javax.persistence.*;
 @Entity
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
 @Table(name="members")
-public class MemberDao {
+public class MemberDao extends Auditable<String> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

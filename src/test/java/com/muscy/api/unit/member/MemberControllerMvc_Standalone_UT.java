@@ -57,7 +57,7 @@ public class MemberControllerMvc_Standalone_UT {
         MockHttpServletResponse response = mockMvc.perform(
                 post("/member")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMemberDao.write(new MemberDao(1L, "Rob", "Mannon", 50)).getJson()))
+                        .content(jsonMemberDao.write(new MemberDao(1L, "Robbie", "Mannonie", 50)).getJson()))
                 .andReturn().getResponse();
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
@@ -101,15 +101,15 @@ public class MemberControllerMvc_Standalone_UT {
     public void canRetrieveByLastNameWhenDoesNotExist() throws Exception {
         // given
         given(memberService.getMember("RobotMan"))
-                .willReturn(Optional.empty());
+                .willThrow(new NonExistingMemberException());
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get("/member/?lastname=RobotMan")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         // then
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("null");
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.getContentAsString()).isEmpty();
     }
     
     @Test
