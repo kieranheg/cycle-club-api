@@ -20,14 +20,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 @Transactional
 public class MemberServiceDb_IT {
-
+    
     
     @Autowired
     MemberService memberService;
     
     @Rollback()
     @Test
-    public void saveShouldPersistedData() {
+    public void saveShouldPersistedData() throws InterruptedException {
         final String JAMES = "James";
         final String BOND = "Bond";
         final int AGE_26 = 26;
@@ -37,9 +37,9 @@ public class MemberServiceDb_IT {
         assertThat(savedMember.getFirstName()).isEqualToIgnoringCase(JAMES);
         assertThat(savedMember.getLastName()).isEqualToIgnoringCase(BOND);
         assertThat(savedMember.getAge()).isEqualTo(AGE_26);
+        assertThat(savedMember.getCreatedDate().toInstant());
     }
     
-    @Rollback()
     @Test
     public void retrieveShouldGetMemberWithId() {
         final String ERNST = "Ernst";
@@ -51,12 +51,13 @@ public class MemberServiceDb_IT {
         assertThat(savedMember.getFirstName()).isEqualToIgnoringCase(ERNST);
         assertThat(savedMember.getLastName()).isEqualToIgnoringCase(BLOFELD);
         assertThat(savedMember.getAge()).isEqualTo(AGE_40);
-    
+        
         Optional<MemberDao> retrievedMember = memberService.getMember(savedMember.getId());
         assertThat(retrievedMember.isPresent()).isNotNull();
         assertThat(retrievedMember.get().getFirstName()).isEqualToIgnoringCase(ERNST);
         assertThat(retrievedMember.get().getLastName()).isEqualToIgnoringCase(BLOFELD);
         assertThat(retrievedMember.get().getAge()).isEqualTo(AGE_40);
+        assertThat(savedMember.getCreatedDate().toInstant());
     }
     
     @Rollback()
@@ -77,6 +78,7 @@ public class MemberServiceDb_IT {
         assertThat(retrievedMember.get().getFirstName()).isEqualToIgnoringCase(FRANCISCO);
         assertThat(retrievedMember.get().getLastName()).isEqualToIgnoringCase(SCARAMANGA);
         assertThat(retrievedMember.get().getAge()).isEqualTo(AGE_55);
+        assertThat(savedMember.getCreatedDate().toInstant());  
     }
 }
 
