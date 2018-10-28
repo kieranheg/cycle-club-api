@@ -42,6 +42,13 @@ public class MemberController {
         log.info(">> in POST member");
         memberService.createMember(newMember);
     }
+    
+    @RequestMapping(value="/member", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateMember(@RequestBody MemberDao updatedMemberDetails) {
+        log.info(">> in PUT member");
+        memberService.updateMember(updatedMemberDetails);
+    }
 }
 // TODO error logging framework
 // TODO Add PUT to update

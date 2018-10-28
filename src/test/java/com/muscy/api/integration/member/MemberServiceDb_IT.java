@@ -80,5 +80,35 @@ public class MemberServiceDb_IT {
         assertThat(retrievedMember.get().getAge()).isEqualTo(AGE_55);
         assertThat(savedMember.getCreatedDate().toInstant());  
     }
+    
+    @Rollback()
+    @Test
+    public void updateShouldSaveNewMemberDetailsWithId() {
+        final String FRANCISCO = "Francisco";
+        final String SCARAMANGA = "Scaramanga";
+        final int AGE_55 = 55;
+        
+        MemberDao savedMember = memberService.createMember(buildMemberDao(FRANCISCO, SCARAMANGA, AGE_55));
+        assertThat(savedMember).isNotNull();
+        assertThat(savedMember.getFirstName()).isEqualToIgnoringCase(FRANCISCO);
+        assertThat(savedMember.getLastName()).isEqualToIgnoringCase(SCARAMANGA);
+        assertThat(savedMember.getAge()).isEqualTo(AGE_55);
+        
+        final String JULIUS = "Julius";
+        final String NO = "No";
+        final int AGE_22 = 22;
+        
+        MemberDao memberUpdates = savedMember;
+        memberUpdates.setFirstName(JULIUS);
+        memberUpdates.setLastName(NO);
+        memberUpdates.setAge(AGE_22);
+        
+        MemberDao updatedMemberDetails = memberService.updateMember(memberUpdates);
+        assertThat(updatedMemberDetails).isNotNull();
+        assertThat(updatedMemberDetails.getFirstName()).isEqualToIgnoringCase(JULIUS);
+        assertThat(updatedMemberDetails.getLastName()).isEqualToIgnoringCase(NO);
+        assertThat(updatedMemberDetails.getAge()).isEqualTo(AGE_22);
+        assertThat(savedMember.getModifiedDate().toInstant());
+    }
 }
 

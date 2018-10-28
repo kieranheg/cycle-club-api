@@ -26,8 +26,7 @@ import static com.muscy.api.helpers.MemberTestUtilities.buildMemberDao;
 import static com.muscy.api.helpers.MemberTestUtilities.buildMultiMembers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MemberControllerMvc_Standalone_UT {
@@ -53,11 +52,12 @@ public class MemberControllerMvc_Standalone_UT {
     
     @Test
     public void canCreateNewMember() throws Exception {
+        MemberDao testMemberDao = buildMemberDao(1L, "Rob", "RobotMan", 25);
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 post("/member")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMemberDao.write(new MemberDao(1L, "Robbie", "Mannonie", 50)).getJson()))
+                        .content(jsonMemberDao.write(testMemberDao).getJson()))
                 .andReturn().getResponse();
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
@@ -93,8 +93,7 @@ public class MemberControllerMvc_Standalone_UT {
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(
-                jsonMemberDao.write(testMemberDao).getJson()
-        );
+                jsonMemberDao.write(testMemberDao).getJson());
     }
     
     @Test
@@ -126,8 +125,7 @@ public class MemberControllerMvc_Standalone_UT {
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(
-                jsonMemberDao.write(testMemberDao).getJson()
-        );
+                jsonMemberDao.write(testMemberDao).getJson());
     }
     
     @Test
@@ -143,5 +141,21 @@ public class MemberControllerMvc_Standalone_UT {
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(response.getContentAsString()).isEmpty();
+    }
+    
+    @Test
+    public void canUpdateMemberWhenExists() throws Exception {
+        MemberDao testMemberDao = buildMemberDao(2L, "Robbiex", "RobotMan", 25);
+        // given
+        given(memberService.updateMember(testMemberDao))
+                .willReturn(testMemberDao);
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                put("/member")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonMemberDao.write(testMemberDao).getJson()))
+                .andReturn().getResponse();
+        // then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 }

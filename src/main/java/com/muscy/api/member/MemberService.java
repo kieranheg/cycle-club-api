@@ -6,9 +6,11 @@ import java.util.Optional;
 public interface MemberService {
     List<MemberDao> retrieveAllMembers();
     
-    MemberDao createMember(MemberDao newMember);
+    MemberDao createMember(final MemberDao newMember);
     
-    Optional<MemberDao> getMember(String lastName);
+    Optional<MemberDao> getMember(final String lastName);
     
-    Optional<MemberDao> getMember(Long id);
+    Optional<MemberDao> getMember(final Long id);
+    
+    MemberDao updateMember(final MemberDao updatedMember);
 }
