@@ -1,5 +1,6 @@
 package com.muscy.api.member;
 
+import com.muscy.api.member.exception.NonExistingMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,31 @@ public class MemberServiceImpl implements MemberService {
     
     @Override
     public MemberDao updateMember(final MemberDao updatedMemberDetails) {
-        return entityManager.merge(updatedMemberDetails);
+        log.info("IN MemberRepositoryImpl updateMember()");
+        
+        Optional<MemberDao> existingMember = memberRepository.findById(updatedMemberDetails.getId());
+        if (existingMember.isPresent()) {
+            MemberDao memberToSave = merge(existingMember.get(), updatedMemberDetails);
+            return memberRepository.save(memberToSave);
+        } else {
+            throw new NonExistingMemberException();
+        }
     }
     
+    private MemberDao merge(final MemberDao existing, final MemberDao updated) {
+        MemberDao memberToSave = existing;
+        memberToSave.setFirstName(getMemberFieldValueToSave(existing.getFirstName(), updated.getFirstName()));
+        memberToSave.setLastName(getMemberFieldValueToSave(existing.getLastName(), updated.getLastName()));
+        memberToSave.setAge(getMemberFieldValueToSave(existing.getAge(), updated.getAge()));
+        return memberToSave;
+    }
     
+    private String getMemberFieldValueToSave(final String existingField, final String updatedField) {
+        return updatedField == null ? existingField : updatedField;
+    }
+    
+    private int getMemberFieldValueToSave(final int existingField, final int updatedField) {
+        return updatedField == 0 ? existingField : updatedField;
+    }
 }
 

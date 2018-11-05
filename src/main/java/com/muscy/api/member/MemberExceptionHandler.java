@@ -11,6 +11,7 @@ public class MemberExceptionHandler {
     
     @ExceptionHandler(NonExistingMemberException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleNonExistingHero() {
+    public void handleNonExistingMember() {
+    
     }
 }

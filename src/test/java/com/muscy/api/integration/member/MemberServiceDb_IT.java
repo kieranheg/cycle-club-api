@@ -21,7 +21,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Transactional
 public class MemberServiceDb_IT {
     
-    
     @Autowired
     MemberService memberService;
     
@@ -83,7 +82,7 @@ public class MemberServiceDb_IT {
     
     @Rollback()
     @Test
-    public void updateShouldSaveNewMemberDetailsWithId() {
+    public void updateShouldSaveNewMemberDetails() {
         final String FRANCISCO = "Francisco";
         final String SCARAMANGA = "Scaramanga";
         final int AGE_55 = 55;
@@ -108,6 +107,33 @@ public class MemberServiceDb_IT {
         assertThat(updatedMemberDetails.getFirstName()).isEqualToIgnoringCase(JULIUS);
         assertThat(updatedMemberDetails.getLastName()).isEqualToIgnoringCase(NO);
         assertThat(updatedMemberDetails.getAge()).isEqualTo(AGE_22);
+        assertThat(savedMember.getModifiedDate().toInstant());
+    }
+    
+    @Rollback()
+    @Test
+    public void updateShouldSaveNewMemberDetailsAndNotOverwriteExistingDetails() {
+        final String LEE = "Lee";
+        final String CHIFFRE = "Chiffre";
+        final int AGE_40 = 40;
+        
+        MemberDao savedMember = memberService.createMember(buildMemberDao(LEE, CHIFFRE, AGE_40));
+        assertThat(savedMember).isNotNull();
+        assertThat(savedMember.getFirstName()).isEqualToIgnoringCase(LEE);
+        assertThat(savedMember.getLastName()).isEqualToIgnoringCase(CHIFFRE);
+        assertThat(savedMember.getAge()).isEqualTo(AGE_40);
+        
+        final String LE = "Le";
+        
+        MemberDao memberUpdates = savedMember;
+        memberUpdates.setFirstName(LE);
+        
+        MemberDao updatedMemberDetails = memberService.updateMember(memberUpdates);
+        assertThat(updatedMemberDetails).isNotNull();
+        assertThat(updatedMemberDetails.getFirstName()).isEqualToIgnoringCase(LE);
+        assertThat(updatedMemberDetails.getLastName()).isEqualToIgnoringCase(CHIFFRE);
+        assertThat(updatedMemberDetails.getAge()).isEqualTo(AGE_40);
+        assertThat(savedMember.getCreatedDate()).isNotNull();
         assertThat(savedMember.getModifiedDate().toInstant());
     }
 }

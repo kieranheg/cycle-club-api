@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class MemberController_SpringBootTest_UT {
     private TestRestTemplate restTemplate;
     
     @Test
-    public void canCreateANewSuperHero() {
+    public void canCreateANewMember() {
         // when
         ResponseEntity<MemberDao> memberDaoResponse = restTemplate.postForEntity("/member/",
                 new MemberDao(1L, "Rob", "Mannon", 23), MemberDao.class);
@@ -51,7 +50,7 @@ public class MemberController_SpringBootTest_UT {
     }
     
     @Test
-    public void canRetrieveByIdWhenDoesNotExist() {
+    public void cannotRetrieveByIdWhenDoesNotExist() {
         // given
         given(memberService.getMember(2L))
                 .willThrow(new NonExistingMemberException());
@@ -82,13 +81,30 @@ public class MemberController_SpringBootTest_UT {
     public void canRetrieveByNameWhenDoesNotExist() {
         // given
         given(memberService.getMember("RobotMan"))
-                .willReturn(Optional.empty());;
+                .willReturn(Optional.empty());
+        ;
         // when
         ResponseEntity<MemberDao> memberDaoResponse = restTemplate
                 .getForEntity("/member/?lastname=RobotMan", MemberDao.class);
         // then
         assertThat(memberDaoResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(memberDaoResponse.getBody()).isNull();
+    }
+    
+    @Test
+    public void cannotUpdateByIdWhenDoesNotExist() {
+        MemberDao memberToUpdate = MemberTestUtilities
+                .buildMemberDao(999L, "Rob", "RobotMan", 25);
+        
+        // given
+        given(memberService.updateMember(memberToUpdate))
+                .willThrow(new NonExistingMemberException());
+        // when
+        HttpEntity<MemberDao> requestEntity = new HttpEntity<>(memberToUpdate, new HttpHeaders());
+        ResponseEntity<MemberDao> memberDaoResponse = restTemplate.exchange(
+                "/member/", HttpMethod.PUT, requestEntity, MemberDao.class);
+        // then
+        assertThat(memberDaoResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
     
 }

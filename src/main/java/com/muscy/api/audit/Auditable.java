@@ -1,8 +1,8 @@
 package com.muscy.api.audit;
 
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -19,12 +19,14 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 public abstract class Auditable<U> {
     
     @Column(name="CREATED")
-    @CreatedDate
+//    @CreatedDate
+    @CreationTimestamp
     @Temporal(TIMESTAMP)
     protected Date createdDate;
     
     @Column(name="MODIFIED")
-    @LastModifiedDate
+//    @LastModifiedDate
+    @UpdateTimestamp
     @Temporal(TIMESTAMP)
     protected Date modifiedDate;
 }
