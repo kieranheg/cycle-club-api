@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 public class MemberController {
     private final MemberService memberService;
@@ -50,6 +51,4 @@ public class MemberController {
         memberService.updateMember(updatedMemberDetails);
     }
 }
-// TODO Created date getting overwritten with null on mod
-// TODO error logging framework
 // TODO Add weather service
