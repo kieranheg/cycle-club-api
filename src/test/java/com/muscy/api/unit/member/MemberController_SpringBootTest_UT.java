@@ -71,7 +71,7 @@ public class MemberController_SpringBootTest_UT {
                 .willReturn(Optional.of(testMemberDao));
         // when
         ResponseEntity<MemberDao> memberDaoResponse = restTemplate
-                .getForEntity("/member/?lastname=RobotMan", MemberDao.class);
+                .getForEntity("/member?lastname=RobotMan", MemberDao.class);
         // then
         assertThat(memberDaoResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(memberDaoResponse.getBody().equals(testMemberDao));
@@ -85,7 +85,7 @@ public class MemberController_SpringBootTest_UT {
         ;
         // when
         ResponseEntity<MemberDao> memberDaoResponse = restTemplate
-                .getForEntity("/member/?lastname=RobotMan", MemberDao.class);
+                .getForEntity("/member?lastname=RobotMan", MemberDao.class);
         // then
         assertThat(memberDaoResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(memberDaoResponse.getBody()).isNull();

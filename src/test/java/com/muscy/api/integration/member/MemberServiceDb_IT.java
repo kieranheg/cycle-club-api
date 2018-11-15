@@ -15,7 +15,6 @@ import java.util.Optional;
 import static com.muscy.api.helpers.MemberTestUtilities.buildMemberDao;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
@@ -26,7 +25,7 @@ public class MemberServiceDb_IT {
     
     @Rollback()
     @Test
-    public void saveShouldPersistedData() throws InterruptedException {
+    public void saveShouldPersistedData() {
         final String JAMES = "James";
         final String BOND = "Bond";
         final int AGE_26 = 26;

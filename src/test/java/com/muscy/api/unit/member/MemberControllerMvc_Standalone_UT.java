@@ -87,7 +87,7 @@ public class MemberControllerMvc_Standalone_UT {
                 .willReturn(Optional.of(testMemberDao));
         // when
         MockHttpServletResponse response = mockMvc.perform(
-                get("/member/?lastname=RobotMan")
+                get("/member?lastname=RobotMan")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         // then
@@ -103,7 +103,7 @@ public class MemberControllerMvc_Standalone_UT {
                 .willThrow(new NonExistingMemberException());
         // when
         MockHttpServletResponse response = mockMvc.perform(
-                get("/member/?lastname=RobotMan")
+                get("/member?lastname=RobotMan")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         // then

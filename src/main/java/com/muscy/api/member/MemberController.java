@@ -26,12 +26,12 @@ public class MemberController {
     }
     
     @GetMapping("/member/{id}")
-    public Optional<MemberDao> getMemberWithId(@PathVariable Long id) {
+    public Optional<MemberDao> getMemberWithId(@PathVariable("id") Long id) {
         log.info(">> in getMemberWithId");
         return memberService.getMember(id);
     }
     
-    @RequestMapping(value="/member", method = RequestMethod.GET)
+    @GetMapping(value="/member")
     public Optional<MemberDao> getMemberWithLastName(@RequestParam("lastname") String lastName) {
         log.info(">> in getMemberWithLastName");
         return memberService.getMember(lastName);
